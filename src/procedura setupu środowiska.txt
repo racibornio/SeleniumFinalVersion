@@ -1,0 +1,150 @@
+1)
+W nowym projekcie w pliku build.gradle.kts dodaj zależności:
+
+testImplementation("org.seleniumhq.selenium:selenium-java:4.27.0")
+implementation(dependencyNotation = "ch.qos.logback:logback-classic:1.4.11")
+
+i przeładuj Gradle.
+
+W katalogu src/test/java utwórz klasę Main i metodę main -> utwórz obiekt sterownika i wczytaj do niego adres URL
+
+========================================================================================
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+
+
+public class Main {
+    public static void main(String[] args) {
+        WebDriver chromeDriver = new ChromeDriver();
+        String sut = "http://e.pl";
+
+        chromeDriver.get(sut);
+        System.out.println("Strona otwarta to " + chromeDriver.getTitle());
+
+        chromeDriver.quit();
+    }
+}
+========================================================================================
+
+
+
+2)
+Mechanizm budowania WebDriver
+
+Utwórz nową klasę o takiej nazwie.
+W pliku build.gradle.kts dodaj zależności:
+// Mechanizm budowania WebDriver - 1/2
+    implementation(dependencyNotation = "io.github.bonigarcia:webdrivermanager:5.5.3")
+
+i przeładuj
+
+Utwórz nowy plik klasy na test.
+
+Wprowadzamy mechanizm notacji.
+W pliku testu:
+- utwórz notacje:
+@BeforeAll
+@BeforeEach
+@Test
+@AfterEach
+@AfterAll
+
+** - Selenium Jupiter dociąga się samoczynnie jako import
+
+- na początku metody utwórz zmienną statyczną:
+static WebDriver chromeDriver;
+
+- w notacji @BeforeAll umieść kod:
+    static void setupClass() {
+        // Mechanizm budowania WebDriver 2/2 - przed stworzeniem instancji WebDriver rozwiązuje wymagany sterownik za pomocą WebDriver Manager
+        WebDriverManager.chromedriver().setup();
+    }
+
+- w notacji @BeforeEach umieść kod:
+    void setup() {
+        chromeDriver = RemoteWebDriver.builder().oneOf(new ChromeOptions()).build();
+    }
+
+- w notacji @AfterEach umieść kod:
+    void tearDown() {
+        chromeDriver.quit();
+    }
+
+- w notacji @AfterAll umieść kod:
+    static void finalizeAll() {
+        if (chromeDriver != null) {
+            chromeDriver.quit();
+            // zamkniecie polaczenia z baza danych itp.
+        }
+    }
+
+- sprawdź czy działa poprzez Run.
+
+Ponieważ mamy już obiekt WebDriver, przekaż do niego adres i uruchom test.
+
+@Test
+    void testNumer1() {
+        chromeDriver.get("http://gazetawroclawska.pl");
+    }
+
+i uruchom go.
+
+Dopisz drugi test:
+@Test
+    void testNumer2() {
+        chromeDriver.get("http://toyota.com");
+    }
+
+i uruchom go.
+
+Uruchom całą suitę testową.
+
+
+3)
+Mechanizm budowania WebDriver Manager
+
+Utwórz nową klasę o takiej nazwie.
+Zależności były już dociągane w mechanizmie budowania Web Driver:
+// Mechanizm budowania WebDriver - 1/2
+    implementation(dependencyNotation = "io.github.bonigarcia:webdrivermanager:5.5.3")
+
+To różni się metodą tworzenia instancji obiektu przeglądarki - od wersji 5-tej poza rozwiązywaniem sterownika, Jupiter instancjonuje obiekt przeglądarki w pamięci komputera metodą create() w jednej linijce kodu w jednej tylko adnotacji.
+
+Utwórz zmienną na obiekt przeglądarki:
+static WebDriver chromeDriver; // powstaje zmienna na stosie, nie jest jeszcze powiązana z obiektem na stercie
+
+Utwórz jedyną wymaganą adnotację przed testami:
+@BeforeAll
+    static void setupClass() {
+        // Mechanizm budowania WebDriver - 2/2
+        //WebDriverManager.chromedriver().setup();
+
+        /** ten jest silniejszy niz "WebDriverManager.chromedriver().setup();" bo rozwiazuje sterownik, ale i tworzy
+         instancje wlasciwego typu WebDriver, przy czym obiekt klasy WebDriver zainstancjonowany na
+         poczatku musi byc statycznym; mozna tez wtedy pominac metode build() pisana w BeforeEach - i
+         cala ta adnotacje - pod warunkiem przypisania od razu wyniku dzialnia metody inicjujacej w @BeforeAll do
+         zmiennej sterownika przegladarki*/
+        chromeDriver = WebDriverManager.chromedriver().create();
+    }
+
+
+
+Utwórz adnotację 'po testach':
+@AfterEach
+void tearDown() {
+        chromeDriver.quit();
+    }
+
+
+Twórz testy:
+@Test
+...
+@Test
+
+@Test
+    void firstTest() {
+        chromeDriver.get("http://google.com");
+    }
+
+-> uruchom!
