@@ -100,6 +100,7 @@ i uruchom go.
 
 Uruchom całą suitę testową.
 
+========================================================================================
 
 3)
 Mechanizm budowania WebDriver Manager
