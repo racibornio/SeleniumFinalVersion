@@ -1,4 +1,4 @@
-1)
+========================= 1 =========================
 W nowym projekcie w pliku build.gradle.kts dodaj zależności:
 
 testImplementation("org.seleniumhq.selenium:selenium-java:4.27.0")
@@ -8,7 +8,7 @@ i przeładuj Gradle.
 
 W katalogu src/test/java utwórz klasę Main i metodę main -> utwórz obiekt sterownika i wczytaj do niego adres URL
 
-========================================================================================
+------------------------------------------------------
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -25,11 +25,11 @@ public class Main {
         chromeDriver.quit();
     }
 }
-========================================================================================
+------------------------------------------------------
 
 
 
-2)
+========================= 2 =========================
 Mechanizm budowania WebDriver
 
 Utwórz nową klasę o takiej nazwie.
@@ -100,9 +100,9 @@ i uruchom go.
 
 Uruchom całą suitę testową.
 
-========================================================================================
+------------------------------------------------------
 
-3)
+========================= 3 =========================
 Mechanizm budowania WebDriver Manager
 
 Utwórz nową klasę o takiej nazwie.
@@ -149,3 +149,4 @@ Twórz testy:
     }
 
 -> uruchom!
+========================= KONIEC =========================

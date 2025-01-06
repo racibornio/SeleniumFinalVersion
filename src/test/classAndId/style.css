@@ -1,0 +1,16 @@
+p {
+    font-size: xx-small;
+}
+
+.menu_items {
+    font-size: medium;
+}
+
+p.content {
+    font-size: larger;
+    color:chartreuse;
+}
+
+p#footer {
+    text-align: center;
+}
