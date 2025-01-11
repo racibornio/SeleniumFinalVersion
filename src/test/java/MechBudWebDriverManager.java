@@ -1,4 +1,5 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.bouncycastle.operator.bc.BcSignerOutputStream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -7,6 +8,9 @@ import org.openqa.selenium.WebDriver;
 public class MechBudWebDriverManager {
 
     static WebDriver chromeDriver;
+
+    // dodaj kilka adresow
+    String stronaNFM = "https://www.nfm.wroclaw.pl/";
 
     @BeforeAll
     static void setupClass() {
@@ -29,5 +33,22 @@ public class MechBudWebDriverManager {
     @Test
     void firstTest() {
         chromeDriver.get("http://google.com");
+    }
+
+    @Test
+    void stronkaNFM() {
+        chromeDriver.get(stronaNFM);
+        System.out.println("Otwarto strone NFM.");
+        // pobierz jej URL
+        System.out.println("Otwarty adres to " + chromeDriver.getCurrentUrl());
+
+        // sprawdz zgodnosc adresu pobranego z oczekiwanym
+        if (chromeDriver.getCurrentUrl().equals(stronaNFM)) {
+            System.out.println("Adres jest poprawny");
+        } else {
+            System.out.println("Adres nie jest poprawny");
+        }
+        // == porownuje referenjce - adresy w pamieci - czy sa/jest identyczne/y dla obiektow
+        // .equels() porownuje wartosc obiektu i/lub zmiennej
     }
 }
