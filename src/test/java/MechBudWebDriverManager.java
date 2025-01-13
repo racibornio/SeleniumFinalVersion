@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,35 +65,48 @@ public class MechBudWebDriverManager {
     @Test
     void tesujStronkaFR24() {
         chromeDriver.get(stronaFR24);
+        chromeDriver.manage().window().maximize();
         System.out.println("Stronka trackera lotow otwarta");
         String tytulFR24 = chromeDriver.getTitle();
         System.out.println("Tytul to " + tytulFR24);
 
+        // utworzenie obiektu wait
         WebDriverWait wait = new WebDriverWait(chromeDriver, Duration.ofSeconds(5));
-        WebElement rejectCookiesBtn = chromeDriver.findElement(By.id("onetrust-reject-all-handler"));
+
+        // odrzuc cookies po 5-ciu sek.
+        WebElement rejectCookiesBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("onetrust-reject-all-handler")));
         rejectCookiesBtn.click();
         System.out.println("Cookiesy odrzucone");
 
-        //WebElement logInBtn = chromeDriver.findElement(By.className("flex h-9 flex-col items-center justify-center text-white"));
-        //logInBtn.click();
-        //System.out.println("Button logIn klikniety");
-        // Compound class names not permitted
-
-        wait = new WebDriverWait(chromeDriver, Duration.ofSeconds(5));
-        WebElement logInBtn = chromeDriver.findElement(By.cssSelector(".flex.h-9.flex-col.items-center.justify-center.text-white"));
+        // naciskanie opcji logowania na konto
+        WebElement logInBtn = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".flex.h-9.flex-col.items-center.justify-center.text-white")));
         logInBtn.click();
         System.out.println("Button logIn klikniety");
 
-        wait = new WebDriverWait(chromeDriver, Duration.ofSeconds(5));
-
-        WebElement emailField = chromeDriver.findElement(By.className("email"));
+        // wpisywanie adresu e-mail
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("[data-testid='email']")));
         emailField.sendKeys("ostrowski.patryk@gmail.com");
-        WebElement pwdField = chromeDriver.findElement(By.name("props.name"));
+
+
+        // wpisywanie hasla
+        WebElement pwdField = wait.until(ExpectedConditions.elementToBeClickable(By.name("props.name")));
         pwdField.sendKeys("t3ra2POLSKA!");
-        WebElement performLoginBtn = chromeDriver.findElement(By.cssSelector("[data-testid='login__submit-button']"));
+
+        // nacisniecie przycisku logowania
+        WebElement performLoginBtn = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("[data-testid='login__submit-button']")));
         performLoginBtn.click();
         System.out.println("Great success!");
         //t3ra2POLSKA!
+
+
+        WebElement accountBtn = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("[class='whitespace-nowrap text-xs uppercase']")));
+        accountBtn.click();
+
+        System.out.println("Tekst to " + accountBtn.getText());
+
+        System.out.println("Button konta klikniety");
+
+
 
     }
 }
