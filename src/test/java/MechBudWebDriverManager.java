@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,7 +89,6 @@ public class MechBudWebDriverManager {
         WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("[data-testid='email']")));
         emailField.sendKeys("ostrowski.patryk@gmail.com");
 
-
         // wpisywanie hasla
         WebElement pwdField = wait.until(ExpectedConditions.elementToBeClickable(By.name("props.name")));
         pwdField.sendKeys("t3ra2POLSKA!");
@@ -105,8 +106,7 @@ public class MechBudWebDriverManager {
         System.out.println("Tekst to " + accountBtn.getText());
 
         System.out.println("Button konta klikniety");
-
-
-
     }
+
+
 }
