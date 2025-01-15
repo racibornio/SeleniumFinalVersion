@@ -91,13 +91,12 @@ public class MechBudWebDriverManager {
 
         // wpisywanie hasla
         WebElement pwdField = wait.until(ExpectedConditions.elementToBeClickable(By.name("props.name")));
-        pwdField.sendKeys("t3ra2POLSKA!");
+        pwdField.sendKeys("");
 
         // nacisniecie przycisku logowania
         WebElement performLoginBtn = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("[data-testid='login__submit-button']")));
         performLoginBtn.click();
         System.out.println("Great success!");
-        //t3ra2POLSKA!
 
 
         WebElement accountBtn = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("[class='whitespace-nowrap text-xs uppercase']")));
