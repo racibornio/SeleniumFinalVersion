@@ -12,8 +12,8 @@ import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.time.Duration;
+import org.assertj.core.api.Assertions;
 
 public class MechBudWebDriverManager {
 
@@ -23,6 +23,7 @@ public class MechBudWebDriverManager {
     // dodaj kilka adresow
     String stronaNFM = "https://www.nfm.wroclaw.pl/";
     String stronaFR24 = "https://www.flightradar24.com/";
+    String stronaEPL = "http://e.pl/";
 
     @BeforeAll
     static void setupClass() {
@@ -105,6 +106,14 @@ public class MechBudWebDriverManager {
         System.out.println("Tekst to " + accountBtn.getText());
 
         System.out.println("Button konta klikniety");
+    }
+
+    @Test
+    void naAsercje() {
+        chromeDriver.get(stronaEPL);
+        String currTitle = chromeDriver.getTitle();
+        String expTitle = "e.pl, konta pocztowe, domeny, hosting";
+        Assertions.assertThat(currTitle).as("Tytul NOK").isEqualTo(expTitle);
     }
 
 
