@@ -116,5 +116,28 @@ public class MechBudWebDriverManager {
         Assertions.assertThat(currTitle).as("Tytul NOK").isEqualTo(expTitle);
     }
 
+    @Test
+    void poXPath() {
+        String sut = "C:/Users/pos/Documents/Szkolenia/WSB Merito/SeleniumFinalVersion/src/test/PoXPath/index.html";
+        chromeDriver.get(sut);
+        System.out.println("Stronka " + chromeDriver.getTitle());
+        WebElement poXPath1 = chromeDriver.findElement(By.xpath("/html/body/p[1]"));
+        System.out.println("Tekst: " + poXPath1.getText());
+        WebElement poXPath2 = chromeDriver.findElement(By.xpath("/html/body/p[2]"));
+        System.out.println("Tekst: " + poXPath2.getText());
+        WebElement poXPath3 = chromeDriver.findElement(By.xpath("/html/body/p[3]"));
+        System.out.println("Tekst: " + poXPath3.getText());
+        WebElement poXPath4 = chromeDriver.findElement(By.xpath("/html/body/p[4]"));
+        System.out.println("Tekst: " + poXPath4.getText());
+        WebElement poXPath5 = chromeDriver.findElement(By.xpath("/html/body/p[5]"));
+        System.out.println("Tekst: " + poXPath5.getText());
+
+        WebElement pierwszyPoXPathAbsolute = chromeDriver.findElement(By.xpath("/html/body/p[1]"));
+        System.out.println("Element po XPath absolute " + pierwszyPoXPathAbsolute.getText());
+
+        WebElement pierwszyPoXPathRelative = chromeDriver.findElement(By.xpath("//p[@class='XPath_wzgledny']"));
+        System.out.println("Element po XPath relative " + pierwszyPoXPathRelative.getText());
+    }
+
 
 }
