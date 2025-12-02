@@ -2,6 +2,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.bouncycastle.operator.bc.BcSignerOutputStream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -38,9 +39,16 @@ public class MechBudWebDriverManager {
         chromeDriver = WebDriverManager.chromedriver().create();
     }
 
+    @BeforeEach
+    void setUp() {
+        chromeDriver = WebDriverManager.chromedriver().create();
+    }
+
     @AfterEach
     void tearDown() {
-        chromeDriver.quit();
+        if (chromeDriver != null) {
+            chromeDriver.quit();
+        }
     }
 
     @Test
@@ -73,6 +81,7 @@ public class MechBudWebDriverManager {
         String tytulFR24 = chromeDriver.getTitle();
         System.out.println("Tytul to " + tytulFR24);
 
+        /*
         // utworzenie obiektu wait
         WebDriverWait wait = new WebDriverWait(chromeDriver, Duration.ofSeconds(5));
 
@@ -106,6 +115,8 @@ public class MechBudWebDriverManager {
         System.out.println("Tekst to " + accountBtn.getText());
 
         System.out.println("Button konta klikniety");
+
+         */
     }
 
     @Test
@@ -118,7 +129,7 @@ public class MechBudWebDriverManager {
 
     @Test
     void poXPath() {
-        String sut = "C:/Users/pos/Documents/Szkolenia/WSB Merito/SeleniumFinalVersion/src/test/PoXPath/index.html";
+        String sut = "C:/Users/Patryk/IdeaProjects/SeleniumFinalVersion/src/test/PoXPath/index.html";
         chromeDriver.get(sut);
         System.out.println("Stronka " + chromeDriver.getTitle());
         WebElement poXPath1 = chromeDriver.findElement(By.xpath("/html/body/p[1]"));
