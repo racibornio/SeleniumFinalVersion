@@ -1,12 +1,10 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.bouncycastle.operator.bc.BcSignerOutputStream;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
@@ -26,22 +24,28 @@ public class MechBudWebDriverManager {
     String stronaFR24 = "https://www.flightradar24.com/";
     String stronaEPL = "http://e.pl/";
 
+//    @BeforeAll
+//    static void setupClass() {
+//        // Mechanizm budowania WebDriver - 2/2
+//        //WebDriverManager.chromedriver().setup();
+//
+//        /** ten jest silniejszy niz "WebDriverManager.chromedriver().setup();" bo rozwiazuje sterownik, ale i tworzy
+//         instancje wlasciwego typu WebDriver, przy czym obiekt klasy WebDriver zainstancjonowany na
+//         poczatku musi byc statycznym; mozna tez wtedy pominac metode build() pisana w BeforeEach - i
+//         cala ta adnotacje - pod warunkiem przypisania od razu wyniku dzialnia metody inicjujacej w @BeforeAll do
+//         zmiennej sterownika przegladarki*/
+//        chromeDriver = WebDriverManager.chromedriver().create();
+//    }
+
     @BeforeAll
     static void setupClass() {
-        // Mechanizm budowania WebDriver - 2/2
-        //WebDriverManager.chromedriver().setup();
-
-        /** ten jest silniejszy niz "WebDriverManager.chromedriver().setup();" bo rozwiazuje sterownik, ale i tworzy
-         instancje wlasciwego typu WebDriver, przy czym obiekt klasy WebDriver zainstancjonowany na
-         poczatku musi byc statycznym; mozna tez wtedy pominac metode build() pisana w BeforeEach - i
-         cala ta adnotacje - pod warunkiem przypisania od razu wyniku dzialnia metody inicjujacej w @BeforeAll do
-         zmiennej sterownika przegladarki*/
-        chromeDriver = WebDriverManager.chromedriver().create();
+        WebDriverManager.chromedriver().setup();
     }
 
     @BeforeEach
     void setUp() {
-        chromeDriver = WebDriverManager.chromedriver().create();
+        //chromeDriver = WebDriverManager.chromedriver().create();
+        chromeDriver = new ChromeDriver();
     }
 
     @AfterEach
@@ -50,6 +54,13 @@ public class MechBudWebDriverManager {
             chromeDriver.quit();
         }
     }
+
+//    @AfterAll
+//    static void tearDown() {
+//        if (chromeDriver != null) {
+//            chromeDriver.quit();
+//        }
+//    }
 
     @Test
     void firstTest() {
@@ -75,20 +86,35 @@ public class MechBudWebDriverManager {
 
     @Test
     void tesujStronkaFR24() {
+        chromeDriver.manage().deleteAllCookies();
         chromeDriver.get(stronaFR24);
         chromeDriver.manage().window().maximize();
         System.out.println("Stronka trackera lotow otwarta");
         String tytulFR24 = chromeDriver.getTitle();
         System.out.println("Tytul to " + tytulFR24);
 
-        /*
+
         // utworzenie obiektu wait
-        WebDriverWait wait = new WebDriverWait(chromeDriver, Duration.ofSeconds(5));
+        WebDriverWait wait = new WebDriverWait(chromeDriver, Duration.ofSeconds(10));
+
+        // sprawdź czy jest baner
+        /*
+        var cookieButtons = chromeDriver.findElements(By.id("onetrust-reject-all-handler"));
+        if (!cookieButtons.isEmpty()) {
+            WebElement rejectCookiesBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.id("onetrust-reject-all-handler")));
+            rejectCookiesBtn.click();
+            System.out.println("Cookiesy odrzucone");
+        } else {
+            System.out.println("Baner cookies nie pojawil sie – pomijam krok odrzucania cookies.");
+        }
+        */
 
         // odrzuc cookies po 5-ciu sek.
-        WebElement rejectCookiesBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("onetrust-reject-all-handler")));
+        WebElement rejectCookiesBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("didomi-notice-disagree-button")));
         rejectCookiesBtn.click();
         System.out.println("Cookiesy odrzucone");
+
 
         // naciskanie opcji logowania na konto
         WebElement logInBtn = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".flex.h-9.flex-col.items-center.justify-center.text-white")));
@@ -116,7 +142,7 @@ public class MechBudWebDriverManager {
 
         System.out.println("Button konta klikniety");
 
-         */
+
     }
 
     @Test
